@@ -501,20 +501,6 @@ Compress the 5 MB nuclei report, summarize critical CVEs, and attach the artifac
 Build an attack chain for the latest engagement and export the node list with severity >= high.
 ```
 
-## Changelog
-
-### Recent Highlights
-
-- **2026-01-27** – OpenAPI documentation with interactive testing interface, supporting conversation management, message interaction, and result querying
-- **2026-01-15** – Skills system with 20+ predefined security testing skills
-- **2026-01-11** – Role-based testing with predefined security testing roles
-- **2026-01-08** – SSE transport mode support for external MCP servers
-- **2026-01-01** – Batch task management with queue-based execution
-- **2025-12-25** – Vulnerability management and conversation grouping features
-- **2025-12-20** – Knowledge base with vector search and hybrid retrieval
-
-
-
 ## 404Starlink 
 
 <img src="./images/404StarLinkLogo.png" width="30%">
@@ -531,6 +517,22 @@ CyberStrikeAI has joined [404Starlink](https://github.com/knownsec/404StarLink)
 ## Stargazers over time
 ![Stargazers over time](https://starchart.cc/Ed1s0nZ/CyberStrikeAI.svg)
 
+
+---
+
+## ⚠️ Disclaimer
+
+**This tool is for educational and authorized testing purposes only!**
+
+CyberStrikeAI is a professional security testing platform designed to assist security researchers, penetration testers, and IT professionals in conducting security assessments and vulnerability research **with explicit authorization**.
+
+**By using this tool, you agree to:**
+- Use this tool only on systems where you have clear written authorization
+- Comply with all applicable laws, regulations, and ethical standards
+- Take full responsibility for any unauthorized use or misuse
+- Not use this tool for any illegal or malicious purposes
+
+**The developers are not responsible for any misuse!** Please ensure your usage complies with local laws and regulations, and that you have obtained explicit authorization from the target system owner.
 
 ---
 
