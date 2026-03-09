@@ -45,7 +45,7 @@ parameters:
       - 确保目标地址格式正确
       - 必需参数，不能为空
     required: true
-    position: 0 # 位置参数，放在命令最后
+    position: 1 # 位置参数，必须放在命令最后（nmap [options] target），用 1 确保在 flag 之后、最后添加
     format: "positional"
   - name: "ports"
     type: "string"
