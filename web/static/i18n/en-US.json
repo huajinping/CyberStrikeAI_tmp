@@ -46,17 +46,18 @@
     "tasks": "Tasks",
     "vulnerabilities": "Vulnerabilities",
     "webshell": "WebShell Management",
+    "chatFiles": "File Management",
     "mcp": "MCP",
     "mcpMonitor": "MCP Monitor",
     "mcpManagement": "MCP Management",
     "knowledge": "Knowledge",
     "knowledgeRetrievalLogs": "Retrieval history",
-    "knowledgeManagement": "Knowledge management",
+    "knowledgeManagement": "Knowledge Management",
     "skills": "Skills",
     "skillsMonitor": "Skills monitor",
-    "skillsManagement": "Skills management",
+    "skillsManagement": "Skills Management",
     "roles": "Roles",
-    "rolesManagement": "Roles management",
+    "rolesManagement": "Roles Management",
     "settings": "System settings"
   },
   "dashboard": {
@@ -186,7 +187,7 @@
     "execFailed": "Execution failed"
   },
   "tasks": {
-    "title": "Task management",
+    "title": "Task Management",
     "stopTask": "Stop task",
     "collapseDetail": "Collapse details",
     "newTask": "New task",
@@ -324,7 +325,7 @@
     "parseModalApplyRun": "Fill and query"
   },
   "vulnerability": {
-    "title": "Vulnerability management",
+    "title": "Vulnerability Management",
     "addVuln": "Add vulnerability",
     "editVuln": "Edit vulnerability",
     "loadFailed": "Failed to load vulnerabilities",
@@ -552,7 +553,7 @@
     "loggedOut": "Signed out"
   },
   "knowledge": {
-    "title": "Knowledge management",
+    "title": "Knowledge Management",
     "retrievalLogs": "Retrieval history",
     "totalItems": "Total items",
     "categories": "Categories",
@@ -565,7 +566,7 @@
     "goToSettings": "Go to settings"
   },
   "roles": {
-    "title": "Role management",
+    "title": "Role Management",
     "createRole": "Create role",
     "searchPlaceholder": "Search roles...",
     "deleteConfirm": "Delete this role?",
@@ -579,7 +580,7 @@
     "noDescriptionShort": "No description"
   },
   "skills": {
-    "title": "Skills management",
+    "title": "Skills Management",
     "monitorTitle": "Skills monitor",
     "createSkill": "Create Skill",
     "callStats": "Call stats",
@@ -994,6 +995,40 @@
     "exportXlsxTitle": "Export results as Excel",
     "batchScanTitle": "Create batch task queue from selected rows"
   },
+  "chatFilesPage": {
+    "title": "File Management",
+    "intro": "Files uploaded in chat appear here. Click “Copy path” to copy the server absolute path and paste it into a conversation so the model can reference the file.",
+    "upload": "Upload",
+    "conversationFilter": "Conversation ID",
+    "conversationPlaceholder": "Leave empty for all",
+    "searchName": "File name",
+    "searchNamePlaceholder": "Filter by file name",
+    "colDate": "Date",
+    "colConversation": "Conversation",
+    "colName": "Name",
+    "colSize": "Size",
+    "colModified": "Modified",
+    "colActions": "Actions",
+    "copyPath": "Copy path",
+    "copyPathTitle": "Copy the absolute path on the server; paste into chat to reference this file",
+    "pathCopied": "Path copied — paste it into chat",
+    "uploadOkHint": "Uploaded. Use “Copy path” to copy the absolute path.",
+    "moreActions": "More: open chat, edit, rename, delete",
+    "download": "Download",
+    "edit": "Edit",
+    "rename": "Rename",
+    "openChat": "Open chat",
+    "confirmDelete": "Delete this file?",
+    "editTitle": "Edit file",
+    "renameTitle": "Rename",
+    "newFileName": "New file name",
+    "empty": "No chat uploads yet",
+    "errorLoad": "Failed to load",
+    "editBinaryHint": "Binary files (images, archives, etc.) cannot be edited as text here. Use Download and open locally.",
+    "editUnavailable": "N/A",
+    "editTooLarge": "File exceeds 2MB and cannot be edited here. Download and edit locally.",
+    "errorGeneric": "Something went wrong. Please try again."
+  },
   "vulnerabilityPage": {
     "statTotal": "Total",
     "filter": "Filter",
@@ -1361,10 +1396,10 @@
     "userPromptHint": "This prompt is appended before user message to guide AI. It does not change system prompt.",
     "relatedTools": "Related tools (optional)",
     "defaultRoleToolsTitle": "Default role uses all tools",
-    "defaultRoleToolsDesc": "Default role uses all tools enabled in MCP management.",
+    "defaultRoleToolsDesc": "Default role uses all tools enabled in MCP Management.",
     "searchToolsPlaceholder": "Search tools...",
     "loadingTools": "Loading tools...",
-    "relatedToolsHint": "Select tools to link; empty = use all from MCP management.",
+    "relatedToolsHint": "Select tools to link; empty = use all from MCP Management.",
     "relatedSkills": "Related Skills (optional)",
     "searchSkillsPlaceholder": "Search skill...",
     "loadingSkills": "Loading skills...",

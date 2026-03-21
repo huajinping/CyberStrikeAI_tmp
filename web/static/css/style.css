@@ -3445,43 +3445,8 @@ header {
     padding: 0;
 }
 
-/* 所有终端容器统一直线滚动条样式 */
-.terminal-container .xterm-viewport,
-.settings-modal .xterm-viewport,
-.webshell-terminal-container .xterm-viewport,
-.modal .xterm-viewport {
+.terminal-container .xterm-viewport {
     border-radius: 0;
-    /* 终端滚动条统一样式 - 始终隐藏 */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
-}
-
-.terminal-container .xterm-viewport::-webkit-scrollbar,
-.settings-modal .xterm-viewport::-webkit-scrollbar,
-.webshell-terminal-container .xterm-viewport::-webkit-scrollbar,
-.modal .xterm-viewport::-webkit-scrollbar {
-    width: 0px; /* Chrome/Safari/Webkit */
-    display: none;
-}
-
-/* 可选：隐藏额外重叠的滚动条 */
-.xterm .xterm-viewport,
-.xterm-viewport {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-/* 确保悬停时不显示 */
-.xterm .xterm-viewport::-webkit-scrollbar,
-.xterm-viewport::-webkit-scrollbar {
-    width: 0px;
-    display: none;
-}
-
-/* 隐藏任何可能的默认浏览器滚动条 */
-*::-webkit-scrollbar {
-    -webkit-appearance: none;
-    appearance: none;
 }
 
 .terminal-error {
@@ -8882,6 +8847,29 @@ header {
     overflow: hidden;
 }
 
+/* WebShell 终端滚动条：深色主题、细窄、圆角，弱化存在感 */
+.webshell-terminal-container .xterm-viewport {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(110, 118, 129, 0.5) transparent;
+}
+.webshell-terminal-container .xterm-viewport::-webkit-scrollbar {
+    width: 6px;
+}
+.webshell-terminal-container .xterm-viewport::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 4px 0;
+    border-radius: 3px;
+}
+.webshell-terminal-container .xterm-viewport::-webkit-scrollbar-thumb {
+    background: rgba(110, 118, 129, 0.4);
+    border-radius: 3px;
+}
+.webshell-terminal-container .xterm-viewport::-webkit-scrollbar-thumb:hover {
+    background: rgba(110, 118, 129, 0.65);
+}
+.webshell-terminal-container .xterm-viewport::-webkit-scrollbar-thumb:active {
+    background: rgba(139, 148, 158, 0.7);
+}
 
 .webshell-file-toolbar {
     display: flex;
@@ -12870,5 +12858,205 @@ header {
     .info-collect-columns-list {
         grid-template-columns: repeat(2, minmax(140px, 1fr));
     }
+}
+
+/* 对话附件文件管理 */
+.chat-files-intro {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.chat-files-filters {
+    margin-bottom: 16px;
+}
+
+.chat-files-table-wrap {
+    overflow-x: auto;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.chat-files-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.chat-files-table th,
+.chat-files-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.chat-files-table th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--bg-secondary, #f8f9fa);
+}
+
+.chat-files-table tr:last-child td {
+    border-bottom: none;
+}
+
+.chat-files-cell-name {
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chat-files-cell-conv code {
+    font-size: 0.8rem;
+    max-width: 160px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+}
+
+.chat-files-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 4px;
+    align-items: center;
+    overflow: visible;
+    position: relative;
+    vertical-align: middle;
+}
+
+.chat-files-action-bar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.chat-files-action-bar .btn-icon {
+    min-width: 34px;
+    min-height: 34px;
+    padding: 6px;
+    flex-shrink: 0;
+}
+
+.chat-files-dropdown-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.chat-files-dropdown {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 4px);
+    min-width: 220px;
+    padding: 8px 0;
+    margin: 0;
+    list-style: none;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    z-index: 400;
+}
+
+/* JS 使用 fixed 定位时覆盖 absolute，避免被表格区域 overflow 裁切 */
+.chat-files-dropdown.chat-files-dropdown-fixed {
+    position: fixed;
+    right: auto;
+}
+
+.chat-files-dropdown-item {
+    display: block;
+    width: 100%;
+    min-height: 40px;
+    padding: 10px 16px;
+    box-sizing: border-box;
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 0.15s ease;
+    white-space: nowrap;
+}
+
+button.chat-files-dropdown-item:hover:not(:disabled) {
+    background: var(--bg-secondary);
+}
+
+.chat-files-dropdown-item.is-danger {
+    color: #dc3545;
+}
+
+.chat-files-dropdown-item.is-danger:hover:not(:disabled) {
+    background: rgba(220, 53, 69, 0.08);
+}
+
+.chat-files-dropdown-item.is-disabled {
+    color: var(--text-secondary);
+    cursor: not-allowed;
+    font-size: 0.8125rem;
+}
+
+.chat-files-no-edit {
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    cursor: help;
+    user-select: none;
+    padding: 0 4px;
+}
+
+.chat-files-modal-path {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    word-break: break-all;
+}
+
+.chat-files-edit-textarea {
+    width: 100%;
+    min-height: 240px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.875rem;
+    line-height: 1.45;
+}
+
+.chat-files-rename-label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.chat-files-toast {
+    position: fixed;
+    z-index: 1100;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    max-width: min(520px, calc(100vw - 32px));
+    padding: 12px 18px;
+    background: var(--text-primary, #1a1a1a);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+    text-align: center;
+}
+
+.chat-files-toast.chat-files-toast-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 

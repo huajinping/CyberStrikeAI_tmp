@@ -150,6 +150,14 @@
                             <span data-i18n="nav.webshell">WebShell管理</span>
                         </div>
                     </div>
+                    <div class="nav-item" data-page="chat-files">
+                        <div class="nav-item-content" data-title="文件管理" onclick="switchPage('chat-files')" data-i18n="nav.chatFiles" data-i18n-attr="data-title" data-i18n-skip-text="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <span data-i18n="nav.chatFiles">文件管理</span>
+                        </div>
+                    </div>
                     <div class="nav-item nav-item-has-submenu" data-page="mcp">
                         <div class="nav-item-content" data-title="MCP" onclick="toggleSubmenu('mcp')" data-i18n="nav.mcp" data-i18n-attr="data-title" data-i18n-skip-text="true">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1000,6 +1008,35 @@
                     </div>
                 </div>
 
+                <!-- 对话附件 / 文件管理 -->
+                <div id="page-chat-files" class="page">
+                    <div class="page-header">
+                        <h2 data-i18n="chatFilesPage.title">文件管理</h2>
+                        <div class="page-header-actions">
+                            <button type="button" class="btn-primary" onclick="document.getElementById('chat-files-upload-input').click()" data-i18n="chatFilesPage.upload">上传文件</button>
+                            <input type="file" id="chat-files-upload-input" style="display:none" onchange="onChatFilesUploadPick(event)" />
+                            <button class="btn-secondary" onclick="loadChatFilesPage()" data-i18n="common.refresh">刷新</button>
+                        </div>
+                    </div>
+                    <div class="page-content">
+                        <p class="chat-files-intro" data-i18n="chatFilesPage.intro">管理在对话中上传的文件。需要让 AI 引用某文件时，在列表中点击「复制路径」，到对话里粘贴即可。</p>
+                        <div class="tasks-filters chat-files-filters">
+                            <label>
+                                <span data-i18n="chatFilesPage.conversationFilter">会话 ID</span>
+                                <input type="text" id="chat-files-filter-conv" class="form-control" data-i18n="chatFilesPage.conversationPlaceholder" data-i18n-attr="placeholder" placeholder="留空表示全部" onkeydown="if(event.key==='Enter') loadChatFilesPage()" />
+                            </label>
+                            <label style="flex:1;min-width:180px;max-width:360px;">
+                                <span data-i18n="chatFilesPage.searchName">文件名</span>
+                                <input type="text" id="chat-files-filter-name" class="form-control" data-i18n="chatFilesPage.searchNamePlaceholder" data-i18n-attr="placeholder" placeholder="筛选文件名" oninput="chatFilesFilterNameOnInput()" onkeydown="if(event.key==='Enter') loadChatFilesPage()" />
+                            </label>
+                            <button class="btn-secondary" type="button" onclick="loadChatFilesPage()" data-i18n="common.search">搜索</button>
+                        </div>
+                        <div id="chat-files-list-wrap" class="chat-files-table-wrap">
+                            <div class="loading-spinner" data-i18n="common.loading">加载中…</div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 任务管理页面 -->
                 <div id="page-tasks" class="page">
                     <div class="page-header">
@@ -1721,6 +1758,42 @@
         </div>
     </div>
 
+    <div id="chat-files-edit-modal" class="modal">
+        <div class="modal-content" style="max-width: 720px;">
+            <div class="modal-header">
+                <h2 data-i18n="chatFilesPage.editTitle">编辑文件</h2>
+                <span class="modal-close" onclick="closeChatFilesEditModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p class="chat-files-modal-path"><code id="chat-files-edit-path"></code></p>
+                <textarea id="chat-files-edit-textarea" class="form-control chat-files-edit-textarea" rows="18"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeChatFilesEditModal()" data-i18n="common.cancel">取消</button>
+                <button type="button" class="btn-primary" onclick="saveChatFilesEdit()" data-i18n="common.save">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="chat-files-rename-modal" class="modal">
+        <div class="modal-content" style="max-width: 480px;">
+            <div class="modal-header">
+                <h2 data-i18n="chatFilesPage.renameTitle">重命名</h2>
+                <span class="modal-close" onclick="closeChatFilesRenameModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <label class="chat-files-rename-label">
+                    <span data-i18n="chatFilesPage.newFileName">新文件名</span>
+                    <input type="text" id="chat-files-rename-input" class="form-control" />
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeChatFilesRenameModal()" data-i18n="common.cancel">取消</button>
+                <button type="button" class="btn-primary" onclick="submitChatFilesRename()" data-i18n="common.ok">确定</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Marked.js for Markdown parsing -->
     <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
     <!-- DOMPurify for HTML sanitization to prevent XSS -->
@@ -2328,6 +2401,7 @@ version: 1.0.0<br>
     <script src="/static/js/skills.js"></script>
     <script src="/static/js/vulnerability.js?v=4"></script>
     <script src="/static/js/webshell.js"></script>
+    <script src="/static/js/chat-files.js"></script>
     <script src="/static/js/tasks.js"></script>
     <script src="/static/js/roles.js"></script>
 </body>

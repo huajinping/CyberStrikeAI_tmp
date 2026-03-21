@@ -320,6 +320,7 @@ func New(cfg *config.Config, log *logger.Logger) (*App, error) {
 	attackChainHandler := handler.NewAttackChainHandler(db, &cfg.OpenAI, log.Logger)
 	vulnerabilityHandler := handler.NewVulnerabilityHandler(db, log.Logger)
 	webshellHandler := handler.NewWebShellHandler(log.Logger, db)
+	chatUploadsHandler := handler.NewChatUploadsHandler(log.Logger)
 	registerWebshellTools(mcpServer, db, webshellHandler, log.Logger)
 	configHandler := handler.NewConfigHandler(configPath, cfg, mcpServer, executor, agent, attackChainHandler, externalMCPMgr, log.Logger)
 	externalMCPHandler := handler.NewExternalMCPHandler(externalMCPMgr, cfg, configPath, log.Logger)
@@ -439,6 +440,7 @@ func New(cfg *config.Config, log *logger.Logger) (*App, error) {
 		app, // 传递 App 实例以便动态获取 knowledgeHandler
 		vulnerabilityHandler,
 		webshellHandler,
+		chatUploadsHandler,
 		roleHandler,
 		skillsHandler,
 		fofaHandler,
@@ -567,6 +569,7 @@ func setupRoutes(
 	app *App, // 传递 App 实例以便动态获取 knowledgeHandler
 	vulnerabilityHandler *handler.VulnerabilityHandler,
 	webshellHandler *handler.WebShellHandler,
+	chatUploadsHandler *handler.ChatUploadsHandler,
 	roleHandler *handler.RoleHandler,
 	skillsHandler *handler.SkillsHandler,
 	fofaHandler *handler.FofaHandler,
@@ -837,6 +840,15 @@ func setupRoutes(
 		protected.DELETE("/webshell/connections/:id", webshellHandler.DeleteConnection)
 		protected.POST("/webshell/exec", webshellHandler.Exec)
 		protected.POST("/webshell/file", webshellHandler.FileOp)
+
+		// 对话附件（chat_uploads）管理
+		protected.GET("/chat-uploads", chatUploadsHandler.List)
+		protected.GET("/chat-uploads/download", chatUploadsHandler.Download)
+		protected.GET("/chat-uploads/content", chatUploadsHandler.GetContent)
+		protected.POST("/chat-uploads", chatUploadsHandler.Upload)
+		protected.DELETE("/chat-uploads", chatUploadsHandler.Delete)
+		protected.PUT("/chat-uploads/rename", chatUploadsHandler.Rename)
+		protected.PUT("/chat-uploads/content", chatUploadsHandler.PutContent)
 
 		// 角色管理
 		protected.GET("/roles", roleHandler.GetRoles)
