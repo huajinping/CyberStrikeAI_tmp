@@ -193,6 +193,11 @@ func RunDeepAgent(
 			subMax = subDefaultIter
 		}
 
+		subSumMw, err := newEinoSummarizationMiddleware(ctx, subModel, appCfg, logger)
+		if err != nil {
+			return nil, fmt.Errorf("子代理 %q summarization 中间件: %w", id, err)
+		}
+
 		sa, err := adk.NewChatModelAgent(ctx, &adk.ChatModelAgentConfig{
 			Name:        id,
 			Description: desc,
@@ -205,6 +210,7 @@ func RunDeepAgent(
 				EmitInternalEvents: true,
 			},
 			MaxIterations: subMax,
+			Handlers:      []adk.ChatModelAgentMiddleware{subSumMw},
 		})
 		if err != nil {
 			return nil, fmt.Errorf("子代理 %q: %w", id, err)
@@ -215,6 +221,11 @@ func RunDeepAgent(
 	mainModel, err := einoopenai.NewChatModel(ctx, baseModelCfg)
 	if err != nil {
 		return nil, fmt.Errorf("Deep 主模型: %w", err)
+	}
+
+	mainSumMw, err := newEinoSummarizationMiddleware(ctx, mainModel, appCfg, logger)
+	if err != nil {
+		return nil, fmt.Errorf("Deep 主代理 summarization 中间件: %w", err)
 	}
 
 	// 与 deep.Config.Name 一致。子代理的 assistant 正文也会经 EmitInternalEvents 流出，若全部当主回复会重复（编排器总结 + 子代理原文）。
@@ -241,6 +252,7 @@ func RunDeepAgent(
 		WithoutGeneralSubAgent: ma.WithoutGeneralSubAgent,
 		WithoutWriteTodos:      ma.WithoutWriteTodos,
 		MaxIteration:           deepMaxIter,
+		Handlers:               []adk.ChatModelAgentMiddleware{mainSumMw},
 		ToolsConfig: adk.ToolsConfig{
 			ToolsNodeConfig: compose.ToolsNodeConfig{
 				Tools: mainTools,
@@ -484,10 +496,11 @@ func historyToMessages(history []agent.ChatMessage) []adk.Message {
 	if len(history) == 0 {
 		return nil
 	}
-	const maxTurns = 40
+	// 放宽条数上限：跨轮历史交给 Eino Summarization（阈值对齐 openai.max_total_tokens）在调用模型前压缩，避免在入队前硬截断为 40 条。
+	const maxHistoryMessages = 300
 	start := 0
-	if len(history) > maxTurns {
-		start = len(history) - maxTurns
+	if len(history) > maxHistoryMessages {
+		start = len(history) - maxHistoryMessages
 	}
 	out := make([]adk.Message, 0, len(history[start:]))
 	for _, h := range history[start:] {
